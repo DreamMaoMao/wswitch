@@ -1,0 +1,20 @@
+[Unit]
+Description=Snappy Switcher - Alt+Tab Window Switcher for Hyprland
+Documentation=https://github.com/user/snappy-switcher
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/snappy-switcher --daemon
+Restart=on-failure
+RestartSec=1
+# Keep restarting during startup until compositor is ready
+StartLimitIntervalSec=60
+StartLimitBurst=30
+
+# Environment - inherit from graphical session
+Environment=WAYLAND_DISPLAY=%t/wayland-0
+
+[Install]
+WantedBy=graphical-session.target
