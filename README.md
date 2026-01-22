@@ -28,28 +28,43 @@
 | Feature | Description |
 |---------|-------------|
 | 🧠 **Context Grouping** | Automatically groups tiled windows by workspace + app class. Your 5 terminal windows become one clean card. |
-| 🎨 **12+ Themed Skins** | Ship with Catppuccin, Dracula, Nord, Tokyo Night, and more. Full `.ini` customization. |
+| 🎨 **12 Themed Skins** | Ships with Catppuccin, Dracula, Nord, Tokyo Night, and more. Full `.ini` customization. |
 | ⚡ **Native Performance** | Pure C with Wayland Layer Shell. No Electron. No lag. |
 | 🔄 **Crash Recovery** | Socket takeover protocol ensures seamless recovery if the daemon restarts. |
 | 🖼️ **Polished Visuals** | Animated selection, drop shadows, rounded corners, and app badges—all Cairo-rendered. |
 
 ---
 
-## 🎬 How It Works
+## 🎬 See It In Action
+
+<div align="center">
+
+https://github.com/user-attachments/assets/ShowcaseSnappy_final_cut.mp4
+
+*Context Mode intelligently grouping tiled windows*
+
+</div>
+
+> 📹 **Note:** After pushing to GitHub, replace the video URL above with the actual GitHub-hosted video link.  
+> Drag your `.mp4` file into a GitHub Issue/PR text box to get the embed URL.
+
+---
+
+## 🔄 How It Works
 
 ```mermaid
 flowchart LR
-    subgraph Input
-        A[👆 Alt+Tab]
+    subgraph Input[" "]
+        A["⌨️ Alt+Tab"]
     end
 
     subgraph Daemon["🔧 Snappy Daemon"]
-        B["📡 Fetch Clients\n(Hyprland IPC)"]
-        C["📊 Sort by MRU\n(Most Recently Used)"]
-        D["🧩 Context Aggregation\n(Group Tiled Windows)"]
+        B["📡 Fetch Clients<br/>(Hyprland IPC)"]
+        C["📊 Sort by MRU<br/>(Most Recently Used)"]
+        D["🧩 Context Aggregation<br/>(Group Tiled Windows)"]
     end
 
-    subgraph Output
+    subgraph Output[" "]
         E["🖼️ Cairo Render"]
         F["👁️ Overlay Display"]
     end
@@ -68,7 +83,7 @@ flowchart LR
 
 ```mermaid
 graph TB
-    subgraph Before["Raw Window List"]
+    subgraph Before["📋 Raw Window List"]
         W1["kitty<br/>workspace 1"]
         W2["kitty<br/>workspace 1"]
         W3["firefox<br/>workspace 2"]
@@ -76,20 +91,20 @@ graph TB
         W5["firefox<br/>floating"]
     end
 
-    subgraph After["After Context Aggregation"]
+    subgraph After["✨ After Context Aggregation"]
         G1["🔲 kitty × 3<br/>workspace 1"]
         G2["🔲 firefox<br/>workspace 2"]
         G3["🔳 firefox<br/>floating"]
     end
 
-    Before -->|"Group Tiled\nPreserve Floating"| After
+    Before -->|"Group Tiled<br/>Preserve Floating"| After
 
     style G1 fill:#313244,stroke:#89b4fa,color:#cdd6f4
     style G2 fill:#313244,stroke:#89b4fa,color:#cdd6f4
     style G3 fill:#45475a,stroke:#f38ba8,color:#cdd6f4
 ```
 
-> **Floating windows** are always shown individually—they're special!
+> 💡 **Floating windows** are always shown individually—they're special!
 
 ---
 
@@ -98,7 +113,7 @@ graph TB
 ### Arch Linux (Recommended)
 
 ```bash
-git clone https://github.com/YourUsername/snappy-switcher.git
+git clone https://github.com/OpalAayan/snappy-switcher.git
 cd snappy-switcher
 makepkg -si
 ```
@@ -156,65 +171,76 @@ bind = ALT, Tab, exec, snappy-switcher next
 bind = ALT SHIFT, Tab, exec, snappy-switcher prev
 ```
 
-### 3️⃣ You're Done! �
+### 3️⃣ You're Done! 🎉
 
 Press <kbd>Alt</kbd> + <kbd>Tab</kbd> to see it in action.
 
 ---
 
-## 🎨 Theming
+## 🎨 Theme Gallery
 
-### Available Themes
+> All 12 themes included out of the box. Just change one line in your config!
 
 <table>
 <tr>
 <td align="center">
 <img src="assets/snappy-slate.png" width="250"/><br/>
-<b>Snappy Slate</b> <i>(Default)</i>
+<b>Snappy Slate</b><br/><sub>Default</sub>
 </td>
 <td align="center">
 <img src="assets/catppuccin-mocha.png" width="250"/><br/>
 <b>Catppuccin Mocha</b>
 </td>
 <td align="center">
-<img src="assets/tokyo-night[red].png" width="250"/><br/>
-<b>Tokyo Night</b>
+<img src="assets/catppuccin-latte.png" width="250"/><br/>
+<b>Catppuccin Latte</b>
 </td>
 </tr>
 <tr>
+<td align="center">
+<img src="assets/tokyo-night[red].png" width="250"/><br/>
+<b>Tokyo Night</b>
+</td>
 <td align="center">
 <img src="assets/nord.png" width="250"/><br/>
 <b>Nord</b>
 </td>
 <td align="center">
+<img src="assets/nordic.png" width="250"/><br/>
+<b>Nordic</b>
+</td>
+</tr>
+<tr>
+<td align="center">
 <img src="assets/dracula.png" width="250"/><br/>
 <b>Dracula</b>
 </td>
 <td align="center">
+<img src="assets/gruvbox-dark.png" width="250"/><br/>
+<b>Gruvbox Dark</b>
+</td>
+<td align="center">
+<img src="assets/rose-pine.png" width="250"/><br/>
+<b>Rosé Pine</b>
+</td>
+</tr>
+<tr>
+<td align="center">
 <img src="assets/cyberpunk.png" width="250"/><br/>
 <b>Cyberpunk</b>
+</td>
+<td align="center">
+<img src="assets/grovestorm.png" width="250"/><br/>
+<b>Grovestorm</b>
+</td>
+<td align="center">
+<img src="assets/default-fallback.png" width="250"/><br/>
+<b>Default Fallback</b>
 </td>
 </tr>
 </table>
 
-<details>
-<summary>📜 <b>All Available Themes</b></summary>
-
-- `snappy-slate.ini` — Default dark theme
-- `catppuccin-mocha.ini` — Catppuccin Mocha
-- `catppuccin-latte.ini` — Catppuccin Latte (light)
-- `tokyo-night.ini` — Tokyo Night
-- `nord.ini` — Nord
-- `nordic.ini` — Nordic variant
-- `dracula.ini` — Dracula
-- `gruvbox-dark.ini` — Gruvbox Dark
-- `rose-pine.ini` — Rosé Pine
-- `grovestorm.ini` — Grovestorm
-- `cyberpunk.ini` — Cyberpunk
-
-</details>
-
-### Change Theme
+### 🎯 Change Theme
 
 Edit `~/.config/snappy-switcher/config.ini`:
 
@@ -277,20 +303,20 @@ flowchart TB
     end
 
     subgraph Daemon["🔧 Daemon Process"]
-        SOCK["Unix Socket\n/tmp/snappy-switcher.sock"]
+        SOCK["🔌 Unix Socket<br/>/tmp/snappy-switcher.sock"]
         
         subgraph Core["Core Logic"]
-            HYP["hyprland.c\nIPC + Window Fetch"]
-            CFG["config.c\nINI Parsing"]
-            ICO["icons.c\nTheme Resolution"]
+            HYP["hyprland.c<br/>IPC + Window Fetch"]
+            CFG["config.c<br/>INI Parsing"]
+            ICO["icons.c<br/>Theme Resolution"]
         end
         
         subgraph Render["Rendering"]
-            RND["render.c\nCairo + Pango"]
-            INP["input.c\nKeyboard Events"]
+            RND["render.c<br/>Cairo + Pango"]
+            INP["input.c<br/>Keyboard Events"]
         end
         
-        WL["Wayland\nLayer Shell"]
+        WL["🌊 Wayland<br/>Layer Shell"]
     end
 
     subgraph External["🌐 External"]
@@ -314,7 +340,7 @@ flowchart TB
     style WL fill:#f9e2af,stroke:#1e1e2e,color:#1e1e2e
 ```
 
-### Key Components
+### 📁 Key Components
 
 | File | Purpose |
 |------|---------|
@@ -338,9 +364,9 @@ flowchart TB
 | `snappy-switcher next` | Cycle to next window |
 | `snappy-switcher prev` | Cycle to previous window |
 | `snappy-switcher toggle` | Show/hide switcher |
-| `snappy-switcher hide` | Force hide |
-| `snappy-switcher select` | Confirm selection |
-| `snappy-switcher quit` | Stop daemon |
+| `snappy-switcher hide` | Force hide overlay |
+| `snappy-switcher select` | Confirm current selection |
+| `snappy-switcher quit` | Stop the daemon |
 
 ---
 
@@ -372,17 +398,19 @@ make clean && make
 
 This project was built with ❤️ for the Linux customization community.
 
-| Credit | Description |
-|--------|-------------|
+| Project | Contribution |
+|---------|--------------|
 | **[hyprshell](https://github.com/H3rmt/hyprshell)** | Massive inspiration for client parsing and layer-shell handling |
 | **[Hyprland](https://hyprland.org/)** | The incredible compositor that makes this possible |
-| **[Catppuccin](https://github.com/catppuccin)** | Beautiful color palettes |
+| **[Catppuccin](https://github.com/catppuccin)** | Beautiful color palettes used in themes |
 
 ---
 
 <div align="center">
 
-**Made with ⚡ by [Opal Aayan](mailto:YougurtMyFace@proton.me)**
+### ⚡ Made with love by [Opal Aayan](mailto:YougurtMyFace@proton.me)
+
+[![Star](https://img.shields.io/github/stars/OpalAayan/snappy-switcher?style=social)](https://github.com/OpalAayan/snappy-switcher)
 
 <sub>Licensed under GPL-3.0</sub>
 
