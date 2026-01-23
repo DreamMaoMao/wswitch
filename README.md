@@ -425,9 +425,13 @@ This project was built with ❤️ for the Linux customization community.
 
 <div align="center">
 
-### ⚡ Made with love by [Opal Aayan](mailto:YougurtMyFace@proton.me)
+### ⚡ Made with love by [OpalAayan](mailto:YougurtMyFace@proton.me)
 
 [![Star](https://img.shields.io/github/stars/OpalAayan/snappy-switcher?style=social)](https://github.com/OpalAayan/snappy-switcher)
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=affaan-m/everything-claude-code,OpalAayan/snappy-switcher&type=date&legend=top-left)](https://www.star-history.com/#affaan-m/everything-claude-code&OpalAayan/snappy-switcher&type=date&legend=top-left)
 
 <sub>Licensed under GPL-3.0</sub>
 
