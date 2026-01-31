@@ -3,4 +3,4 @@
 *.o
 *-protocol.h
 *-protocol.c
-snappy-switcher
+wswitch

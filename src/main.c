@@ -1,4 +1,4 @@
-/* src/main.c - Snappy Switcher Daemon (v1.0 Stable) */
+/* src/main.c - wswitch Switcher Daemon (v1.0 Stable) */
 #define _POSIX_C_SOURCE 200809L
 
 #include "backend.h"
@@ -180,7 +180,7 @@ static void create_panel(void) {
 
   layer_surface = zwlr_layer_shell_v1_get_layer_surface(
       layer_shell, surface, NULL, ZWLR_LAYER_SHELL_V1_LAYER_OVERLAY,
-      "snappy-switcher");
+      "wswitch");
   if (!layer_surface) {
     LOG("Failed to create layer surface");
     wl_surface_destroy(surface);
@@ -324,7 +324,7 @@ static int run_client(const char *cmd) {
 
   if (!is_daemon_running()) {
     fprintf(stderr,
-            "Daemon not running. Start with: snappy-switcher --daemon\n");
+            "Daemon not running. Start with: wswitch --daemon\n");
     return 1;
   }
   return send_command(socket_cmd) == 0 ? 0 : 1;
@@ -446,7 +446,7 @@ static int run_daemon(void) {
   surface = wl_compositor_create_surface(compositor);
   layer_surface = zwlr_layer_shell_v1_get_layer_surface(
       layer_shell, surface, NULL, ZWLR_LAYER_SHELL_V1_LAYER_OVERLAY,
-      "snappy-switcher");
+      "wswitch");
   zwlr_layer_surface_v1_set_size(layer_surface, 1,
                                  1); /* Minimal initial size */
   zwlr_layer_surface_v1_set_anchor(layer_surface, 0);

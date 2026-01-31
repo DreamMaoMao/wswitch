@@ -1,10 +1,10 @@
 # Maintainer: DreamMaoMao <maoopzopaasnmakslpo@gmail.com>
-pkgname=snappy-switcher
+pkgname=wswitch
 pkgver=1.0.0
 pkgrel=1
 pkgdesc="A fast, Alt+Tab window switcher for wayland compositors with MRU sorting and context grouping"
 arch=('x86_64')
-url="https://github.com/OpalAayan/snappy-switcher"
+url="https://github.com/OpalAayan/wswitch"
 license=('GPL3')
 depends=(
   'wayland'
@@ -40,15 +40,15 @@ package() {
   cd "$pkgname-$pkgver"
 
   # 1. Binaries
-  install -Dm755 snappy-switcher "$pkgdir/usr/bin/snappy-switcher"
-  install -Dm755 scripts/install-config.sh "$pkgdir/usr/bin/snappy-install-config"
+  install -Dm755 wswitch "$pkgdir/usr/bin/wswitch"
+  install -Dm755 scripts/install-config.sh "$pkgdir/usr/bin/wswitch-install-config"
 
   # 2. Themes
-  install -d "$pkgdir/usr/share/snappy-switcher/themes"
-  install -Dm644 themes/*.ini "$pkgdir/usr/share/snappy-switcher/themes/"
+  install -d "$pkgdir/usr/share/wswitch/themes"
+  install -Dm644 themes/*.ini "$pkgdir/usr/share/wswitch/themes/"
 
   # 3. System Config Defaults
-  install -Dm644 config.ini.example "$pkgdir/etc/xdg/snappy-switcher/config.ini"
+  install -Dm644 config.ini.example "$pkgdir/etc/xdg/wswitch/config.ini"
 
   # 4. Documentation
   install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
@@ -57,7 +57,7 @@ package() {
   install -Dm644 config.ini.example "$pkgdir/usr/share/doc/$pkgname/config.ini.example"
 
   # 5. Systemd Service (Optional, but good to include if available)
-  if [ -f "snappy-switcher.service" ]; then
-    install -Dm644 snappy-switcher.service "$pkgdir/usr/lib/systemd/user/snappy-switcher.service"
+  if [ -f "wswitch.service" ]; then
+    install -Dm644 wswitch.service "$pkgdir/usr/lib/systemd/user/wswitch.service"
   fi
 }

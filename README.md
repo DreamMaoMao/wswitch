@@ -1,17 +1,17 @@
 <div align="center">
 
-# ⚡ Snappy Switcher
+# ⚡ wswitch Switcher
 
 ### A blazing-fast, animated Alt+Tab window switcher for wayland compositors
 
 [![License](https://img.shields.io/badge/License-GPL3-blue?style=for-the-badge&logo=gnu)](LICENSE)
 [![Language](https://img.shields.io/badge/Language-C-orange?style=for-the-badge&logo=c)](https://en.cppreference.com/w/c)
 [![Version](https://img.shields.io/badge/Version-1.0-success?style=for-the-badge)]()
-[![AUR](https://img.shields.io/aur/version/snappy-switcher?color=blue&label=AUR&logo=arch-linux&style=for-the-badge)](https://aur.archlinux.org/packages/snappy-switcher)
+[![AUR](https://img.shields.io/aur/version/wswitch?color=blue&label=AUR&logo=arch-linux&style=for-the-badge)](https://aur.archlinux.org/packages/wswitch)
 
 <br/>
 
-<img src="assets/snappy-slate.png" alt="Snappy Switcher Showcase" width="700"/>
+<img src="assets/wswitch-slate.png" alt="wswitch Switcher Showcase" width="700"/>
 
 <br/>
 
@@ -21,9 +21,9 @@
 
 ---
 
-## ✨ Why Snappy Switcher?
+## ✨ Why wswitch Switcher?
 
-**Snappy Switcher** isn't just another window list—it's a **context-aware** window manager that thinks like you do:
+**wswitch Switcher** isn't just another window list—it's a **context-aware** window manager that thinks like you do:
 
 | Feature | Description |
 |---------|-------------|
@@ -47,7 +47,7 @@
 
 **Using Yay**
 ```bash
-yay -S snappy-switcher
+yay -S wswitch
 ```
 
 </td>
@@ -55,7 +55,7 @@ yay -S snappy-switcher
 
 **Using Paru**
 ```bash
-paru -S snappy-switcher
+paru -S wswitch
 ```
 
 </td>
@@ -66,8 +66,8 @@ paru -S snappy-switcher
 <summary>📦 <b>Build from PKGBUILD</b></summary>
 
 ```bash
-git clone https://github.com/OpalAayan/snappy-switcher.git
-cd snappy-switcher
+git clone https://github.com/OpalAayan/wswitch.git
+cd wswitch
 makepkg -si
 ```
 
@@ -113,10 +113,10 @@ make install-user
 ### 1️⃣ Setup Configuration
 
 ```bash
-snappy-install-config
+wswitch-install-config
 ```
 
-This copies themes and creates `~/.config/snappy-switcher/config.ini`.
+This copies themes and creates `~/.config/wswitch/config.ini`.
 
 ### 2️⃣ Add to Sway Config
 
@@ -124,11 +124,11 @@ Add these lines to `~/.config/sway/config`:
 
 ```bash
 # Start the daemon on login
-exec-once = snappy-switcher --daemon
+exec-once = wswitch --daemon
 
 # Keybindings
-bind = ALT, Tab, exec, snappy-switcher next
-bind = ALT SHIFT, Tab, exec, snappy-switcher prev
+bind = ALT, Tab, exec, wswitch next
+bind = ALT SHIFT, Tab, exec, wswitch prev
 ```
 
 ### 3️⃣ You're Done! 🎉
@@ -144,8 +144,8 @@ Press <kbd>Alt</kbd> + <kbd>Tab</kbd> to see it in action.
 <table>
 <tr>
 <td align="center">
-<img src="assets/snappy-slate.png" width="250"/><br/>
-<b>Snappy Slate</b><br/><sub>Default</sub>
+<img src="assets/wswitch-slate.png" width="250"/><br/>
+<b>wswitch Slate</b><br/><sub>Default</sub>
 </td>
 <td align="center">
 <img src="assets/catppuccin-mocha.png" width="250"/><br/>
@@ -202,7 +202,7 @@ Press <kbd>Alt</kbd> + <kbd>Tab</kbd> to see it in action.
 
 ### 🎯 Change Theme
 
-Edit `~/.config/snappy-switcher/config.ini`:
+Edit `~/.config/wswitch/config.ini`:
 
 ```ini
 [theme]
@@ -217,7 +217,7 @@ name = catppuccin-mocha.ini
 <summary>🔧 <b>Full Configuration Reference</b></summary>
 
 ```ini
-# ~/.config/snappy-switcher/config.ini
+# ~/.config/wswitch/config.ini
 
 [general]
 # overview = Show all windows individually
@@ -225,7 +225,7 @@ name = catppuccin-mocha.ini
 mode = context
 
 [theme]
-name = snappy-slate.ini
+name = wswitch-slate.ini
 border_width = 2
 corner_radius = 12
 
@@ -261,13 +261,13 @@ title_size = 10
 
 | Command | Description |
 |---------|-------------|
-| `snappy-switcher --daemon` | Start background daemon |
-| `snappy-switcher next` | Cycle to next window |
-| `snappy-switcher prev` | Cycle to previous window |
-| `snappy-switcher toggle` | Show/hide switcher |
-| `snappy-switcher hide` | Force hide overlay |
-| `snappy-switcher select` | Confirm current selection |
-| `snappy-switcher quit` | Stop the daemon |
+| `wswitch --daemon` | Start background daemon |
+| `wswitch next` | Cycle to next window |
+| `wswitch prev` | Cycle to previous window |
+| `wswitch toggle` | Show/hide switcher |
+| `wswitch hide` | Force hide overlay |
+| `wswitch select` | Confirm current selection |
+| `wswitch quit` | Stop the daemon |
 
 ---
 
@@ -277,8 +277,8 @@ Contributions are welcome! Here's how to get started:
 
 ```bash
 # Clone the repo
-git clone https://github.com/OpalAayan/snappy-switcher.git
-cd snappy-switcher
+git clone https://github.com/OpalAayan/wswitch.git
+cd wswitch
 
 # Build
 make
@@ -310,11 +310,11 @@ This project was built with ❤️ for the Linux customization community.
 
 ### ⚡ Made with love by [OpalAayan](mailto:YougurtMyFace@proton.me)
 
-[![Star](https://img.shields.io/github/stars/OpalAayan/snappy-switcher?style=social)](https://github.com/OpalAayan/snappy-switcher)
+[![Star](https://img.shields.io/github/stars/OpalAayan/wswitch?style=social)](https://github.com/OpalAayan/wswitch)
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=OpalAayan/snappy-switcher&type=date&legend=top-left)](https://www.star-history.com/#OpalAayan/snappy-switcher&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=OpalAayan/wswitch&type=date&legend=top-left)](https://www.star-history.com/#OpalAayan/wswitch&type=date&legend=top-left)
 
 <sub>Licensed under GPL-3.0</sub>
 

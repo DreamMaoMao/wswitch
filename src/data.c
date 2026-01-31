@@ -1,4 +1,4 @@
-/* src/data.c - Data structures for Snappy Switcher */
+/* src/data.c - Data structures for wswitch Switcher */
 #include "data.h"
 #include <stdlib.h>
 #include <string.h>

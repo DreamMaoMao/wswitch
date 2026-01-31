@@ -1,8 +1,8 @@
-pkgbase = snappy-switcher
+pkgbase = wswitch
 	pkgdesc = A fast, Alt+Tab window switcher for wayland compositors with MRU sorting and context grouping
 	pkgver = 1.0.0
 	pkgrel = 1
-	url = https://github.com/OpalAayan/snappy-switcher
+	url = https://github.com/OpalAayan/wswitch
 	arch = x86_64
 	license = GPL3
 	makedepends = wayland-protocols
@@ -17,9 +17,9 @@ pkgbase = snappy-switcher
 	depends = glib2
 	depends = librsvg
 	optdepends = tela-icon-theme: Recommended icon theme
-	provides = snappy-switcher
-	conflicts = snappy-switcher-git
-	source = https://github.com/OpalAayan/snappy-switcher/archive/v1.0.0.tar.gz
+	provides = wswitch
+	conflicts = wswitch-git
+	source = https://github.com/OpalAayan/wswitch/archive/v1.0.0.tar.gz
 	sha256sums = a3e9d527f1598c0ad59b22a9a7f52bc4f8c0ed690a3a22d0fc75d5afc6df24f1
 
-pkgname = snappy-switcher
+pkgname = wswitch

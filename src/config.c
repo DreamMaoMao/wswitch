@@ -11,7 +11,7 @@
 
 #define LOG(fmt, ...) fprintf(stderr, "[Config] " fmt "\n", ##__VA_ARGS__)
 
-/* --- Defaults ("Snappy Slate" Theme) --- */
+/* --- Defaults ("wswitch Slate" Theme) --- */
 static void set_defaults(Config *cfg) {
   cfg->mode = MODE_CONTEXT;
   cfg->follow_monitor = false;
@@ -206,9 +206,9 @@ static int load_theme(const char *theme_name, Config *cfg) {
   char path[1024];
 
   /* Search Order: User themes first, then system */
-  const char *search_paths[] = {"%s/.config/snappy-switcher/themes/%s",
-                                "/usr/share/snappy-switcher/themes/%s",
-                                "/usr/local/share/snappy-switcher/themes/%s",
+  const char *search_paths[] = {"%s/.config/wswitch/themes/%s",
+                                "/usr/share/wswitch/themes/%s",
+                                "/usr/local/share/wswitch/themes/%s",
                                 NULL};
 
   for (int i = 0; search_paths[i]; i++) {
@@ -254,15 +254,15 @@ static void create_default_config(const char *path) {
   }
 
   /* Write minimal self-documenting default config */
-  fprintf(f, "# Snappy Switcher Configuration\n");
+  fprintf(f, "# wswitch Switcher Configuration\n");
   fprintf(f, "# Auto-generated default config\n\n");
   fprintf(f, "[general]\n");
   fprintf(f, "# mode = context | overview\n");
   fprintf(f, "mode = context\n\n");
   fprintf(f, "[theme]\n");
-  fprintf(f, "# Available: snappy-slate, tokyo-night, catppuccin-mocha,\n");
+  fprintf(f, "# Available: wswitch-slate, tokyo-night, catppuccin-mocha,\n");
   fprintf(f, "#            dracula, nord, gruvbox-dark, rose-pine, etc.\n");
-  fprintf(f, "name = snappy-slate.ini\n\n");
+  fprintf(f, "name = wswitch-slate.ini\n\n");
   fprintf(f, "[icons]\n");
   fprintf(f, "theme = Tela-dracula\n");
   fprintf(f, "fallback = Tela-circle-dracula\n");
@@ -288,18 +288,18 @@ Config *load_config(void) {
 
   char config_path[1024];
   snprintf(config_path, sizeof(config_path),
-           "%s/.config/snappy-switcher/config.ini", home);
+           "%s/.config/wswitch/config.ini", home);
 
   /* First Pass: Read config and extract theme name */
   char theme_name[256] = "";
   if (parse_ini_file(config_path, cfg, theme_name, sizeof(theme_name)) < 0) {
     /* Try system config */
-    if (parse_ini_file("/etc/xdg/snappy-switcher/config.ini", cfg, theme_name,
+    if (parse_ini_file("/etc/xdg/wswitch/config.ini", cfg, theme_name,
                        sizeof(theme_name)) < 0) {
       /* Self-Healing: Create default config file */
       create_default_config(config_path);
-      strncpy(theme_name, "snappy-slate.ini", sizeof(theme_name) - 1);
-      LOG("Using defaults with snappy-slate theme");
+      strncpy(theme_name, "wswitch-slate.ini", sizeof(theme_name) - 1);
+      LOG("Using defaults with wswitch-slate theme");
     }
   }
 

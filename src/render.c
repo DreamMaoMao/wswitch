@@ -40,7 +40,7 @@ static const uint32_t icon_colors[] = {
 void render_set_config(Config *config) { cfg = config; }
 
 int create_shm_file(off_t size) {
-  char name[] = "/tmp/snappy-shm-XXXXXX";
+  char name[] = "/tmp/wswitch-shm-XXXXXX";
   int fd = mkstemp(name);
   if (fd < 0)
     return -1;

@@ -1,12 +1,12 @@
-# Snappy Switcher Themes
+# wswitch Switcher Themes
 
-This directory contains color themes for Snappy Switcher.
+This directory contains color themes for wswitch Switcher.
 
 ## Available Themes
 
 | Theme | Description |
 |-------|-------------|
-| `snappy-slate.ini` | Default dark theme (Catppuccin-inspired) |
+| `wswitch-slate.ini` | Default dark theme (Catppuccin-inspired) |
 | `catppuccin-mocha.ini` | Catppuccin Mocha |
 | `catppuccin-latte.ini` | Catppuccin Latte (light theme) |
 | `nord.ini` | Nord color scheme |
@@ -16,7 +16,7 @@ This directory contains color themes for Snappy Switcher.
 
 ## How to Use
 
-1. Edit your `~/.config/snappy-switcher/config.ini`
+1. Edit your `~/.config/wswitch/config.ini`
 2. Set the theme name:
    ```ini
    [theme]
@@ -24,16 +24,16 @@ This directory contains color themes for Snappy Switcher.
    ```
 3. Restart the daemon:
    ```bash
-   snappy-switcher quit
-   snappy-switcher --daemon
+   wswitch quit
+   wswitch --daemon
    ```
 
 ## Theme Locations
 
 Themes are searched in order:
-1. `~/.config/snappy-switcher/themes/` (user themes)
-2. `/usr/share/snappy-switcher/themes/` (system themes)
-3. `/usr/local/share/snappy-switcher/themes/` (local install)
+1. `~/.config/wswitch/themes/` (user themes)
+2. `/usr/share/wswitch/themes/` (system themes)
+3. `/usr/local/share/wswitch/themes/` (local install)
 
 ## Creating Custom Themes
 
@@ -51,7 +51,7 @@ subtext_color = #a6adc8
 border_color = #89b4fa
 ```
 
-Save it to `~/.config/snappy-switcher/themes/my-theme.ini` and reference it in your config.
+Save it to `~/.config/wswitch/themes/my-theme.ini` and reference it in your config.
 
 ## Overriding Colors
 

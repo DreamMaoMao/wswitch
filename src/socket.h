@@ -5,7 +5,7 @@
 #include <stdbool.h>
 
 /* Socket path */
-#define SOCKET_PATH "/tmp/snappy-switcher.sock"
+#define SOCKET_PATH "/tmp/wswitch.sock"
 
 /* Commands */
 #define CMD_NEXT "NEXT"

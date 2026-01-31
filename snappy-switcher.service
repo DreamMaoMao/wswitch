@@ -1,12 +1,12 @@
 [Unit]
-Description=Snappy Switcher - Alt+Tab Window Switcher for wayland compositors
-Documentation=https://github.com/user/snappy-switcher
+Description=wswitch Switcher - Alt+Tab Window Switcher for wayland compositors
+Documentation=https://github.com/user/wswitch
 After=graphical-session.target
 PartOf=graphical-session.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/snappy-switcher --daemon
+ExecStart=/usr/local/bin/wswitch --daemon
 Restart=on-failure
 RestartSec=1
 # Keep restarting during startup until compositor is ready
