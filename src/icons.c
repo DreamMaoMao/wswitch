@@ -102,8 +102,8 @@ static char *find_icon_in_theme(const char *theme, const char *icon_name,
   static char path[MAX_PATH];
   (void)size; /* Size hint not used currently */
 
-  const char *sizes[] = {"scalable", "256x256", "128x128", "64x64", "48x48",
-                         "32x32",    "24x24",   "22x22",   "16x16"};
+  const char *sizes[] = {"scalable", "512x512", "256x256", "128x128", "64x64",
+                         "48x48",    "32x32",   "24x24",   "22x22",   "16x16"};
   const char *categories[] = {"apps",   "applications", "mimetypes",
                               "places", "devices",      "actions",
                               "status", "categories"};
