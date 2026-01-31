@@ -2,7 +2,9 @@
 
 # ⚡ wswitch Switcher
 
-### A blazing-fast, animated Alt+Tab window switcher for wayland compositors
+This is a fork of the [snappy-wswitch](https://github.com/OpalAayan/snappy-switcher).
+
+### A blazing-fast, Alt+Tab window switcher for wayland compositors
 
 [![License](https://img.shields.io/badge/License-GPL3-blue?style=for-the-badge&logo=gnu)](LICENSE)
 [![Language](https://img.shields.io/badge/Language-C-orange?style=for-the-badge&logo=c)](https://en.cppreference.com/w/c)
@@ -21,19 +23,9 @@
 
 ---
 
-## ✨ Why wswitch Switcher?
+## 🖥️ **Compatible Compositors**
 
-**wswitch Switcher** isn't just another window list—it's a **context-aware** window manager that thinks like you do:
-
-| Feature | Description |
-|---------|-------------|
-| 🎨 **12 Themed Skins** | Ships with Catppuccin, Dracula, Nord, Tokyo Night, and more. Full `.ini` customization. |
-| ⚡ **Native Performance** | Pure C with Wayland Layer Shell. No Electron. No lag. |
-| 🔄 **Crash Recovery** | Socket takeover protocol ensures seamless recovery if the daemon restarts. |
-| 🖼️ **Polished Visuals** | Animated selection, drop shadows, rounded corners, and app badges—all Cairo-rendered. |
-
----
-
+**wswitch** works with **any Wayland compositor** that implements the **foreign-toplevel** protocol, such as **Mango**, **Sway**, and more.
 
 
 ## 📦 Installation
@@ -135,68 +127,6 @@ Press <kbd>Alt</kbd> + <kbd>Tab</kbd> to see it in action.
 
 ---
 
-## 🎨 Theme Gallery
-
-> All 12 themes included out of the box. Just change one line in your config!
-
-<table>
-<tr>
-<td align="center">
-<img src="assets/wswitch-slate.png" width="250"/><br/>
-<b>wswitch Slate</b><br/><sub>Default</sub>
-</td>
-<td align="center">
-<img src="assets/catppuccin-mocha.png" width="250"/><br/>
-<b>Catppuccin Mocha</b>
-</td>
-<td align="center">
-<img src="assets/catppuccin-latte.png" width="250"/><br/>
-<b>Catppuccin Latte</b>
-</td>
-</tr>
-<tr>
-<td align="center">
-<img src="assets/tokyo-night.png" width="250"/><br/>
-<b>Tokyo Night</b>
-</td>
-<td align="center">
-<img src="assets/nord.png" width="250"/><br/>
-<b>Nord</b>
-</td>
-<td align="center">
-<img src="assets/nordic.png" width="250"/><br/>
-<b>Nordic</b>
-</td>
-</tr>
-<tr>
-<td align="center">
-<img src="assets/dracula.png" width="250"/><br/>
-<b>Dracula</b>
-</td>
-<td align="center">
-<img src="assets/gruvbox-dark.png" width="250"/><br/>
-<b>Gruvbox Dark</b>
-</td>
-<td align="center">
-<img src="assets/rose-pine.png" width="250"/><br/>
-<b>Rosé Pine</b>
-</td>
-</tr>
-<tr>
-<td align="center">
-<img src="assets/cyberpunk.png" width="250"/><br/>
-<b>Cyberpunk</b>
-</td>
-<td align="center">
-<img src="assets/grovestorm.png" width="250"/><br/>
-<b>Grovestorm</b>
-</td>
-<td align="center">
-<img src="assets/default-fallback.png" width="250"/><br/>
-<b>Default Fallback</b>
-</td>
-</tr>
-</table>
 
 ### 🎯 Change Theme
 
@@ -212,7 +142,6 @@ name = catppuccin-mocha.ini
 ## ⚙️ Configuration
 
 <details>
-<summary>🔧 <b>Full Configuration Reference</b></summary>
 
 ```ini
 # ~/.config/wswitch/config.ini
@@ -245,15 +174,9 @@ family = Sans
 weight = Bold
 title_size = 10
 ```
-
 </details>
 
-📘 **[Full Configuration Documentation →](docs/CONFIGURATION.md)**
-
 ---
-
-
-
 
 ## 🧪 Available Commands
 
@@ -269,38 +192,11 @@ title_size = 10
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! Here's how to get started:
-
-```bash
-# Clone the repo
-git clone https://github.com/OpalAayan/wswitch.git
-cd wswitch
-
-# Build
-make
-
-# Run tests
-make test
-
-# Clean build
-make clean && make
-
-# Run stress tests
-./scripts/ultimate_stress_test.sh
-```
-
----
-
 ## 💡 Credits & Inspiration
-
-This project was built with ❤️ for the Linux customization community.
 
 | Project | Contribution |
 |---------|--------------|
-| **[hyprshell](https://github.com/H3rmt/hyprshell)** | Massive inspiration for client parsing and layer-shell handling |
-| **[Catppuccin](https://github.com/catppuccin)** | Beautiful color palettes used in themes |
+| **[hyprshell](https://github.com/OpalAayan/snappy-switcher)** | Massive inspiration for the design of the window switcher |
 
 ---
 
