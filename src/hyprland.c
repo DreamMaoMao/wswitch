@@ -3,7 +3,6 @@
 
 #include "hyprland.h"
 #include "config.h"
-#include <errno.h>
 #include <json-c/json.h>
 #include <stdio.h>
 #include <stdlib.h>

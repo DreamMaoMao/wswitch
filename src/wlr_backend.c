@@ -2,10 +2,8 @@
 #define _POSIX_C_SOURCE 200809L
 
 #include "wlr_backend.h"
-#include "backend.h"
 #include "config.h"
 #include "data.h"
-#include <errno.h>
 #include <poll.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,7 +25,7 @@ struct WindowNode {
   int state;
   int is_active;
   int is_minimized;
-  int activation_serial; // window activation serial
+  int activation_serial;
   WindowNode *next;
 };
 
@@ -40,7 +38,7 @@ typedef struct {
   int window_count;
   int initialized;
   int needs_refresh;
-  int activation_counter; // global activation counter
+  int activation_counter;
 } WlrBackendState;
 
 static WlrBackendState backend_state = {0};
@@ -113,7 +111,6 @@ toplevel_handle_title(void *data,
   if (window->title)
     free(window->title);
   window->title = strdup(title ? title : "");
-  LOG("Window title updated: %s", window->title);
 }
 
 static void
@@ -126,7 +123,6 @@ toplevel_handle_app_id(void *data,
   if (window->app_id)
     free(window->app_id);
   window->app_id = strdup(app_id ? app_id : "");
-  LOG("Window app_id updated: %s", window->app_id);
 }
 
 static void
@@ -136,7 +132,6 @@ toplevel_handle_output_enter(void *data,
   (void)data;
   (void)toplevel;
   (void)output;
-  LOG("Window entered output");
 }
 
 static void
@@ -146,7 +141,6 @@ toplevel_handle_output_leave(void *data,
   (void)data;
   (void)toplevel;
   (void)output;
-  LOG("Window left output");
 }
 
 static void
@@ -175,7 +169,6 @@ toplevel_handle_state(void *data,
 
   // if window is active and wasn't before, move it to the front
   if (window->is_active && !was_active) {
-    LOG("Window became active: %s", window->title);
     move_window_to_front(window);
   }
 }
@@ -186,7 +179,6 @@ toplevel_handle_done(void *data,
   WindowNode *window = (WindowNode *)data;
   (void)toplevel;
 
-  LOG("Window done: %s (app_id: %s)", window->title, window->app_id);
   backend_state.needs_refresh = 1;
 }
 
@@ -195,8 +187,6 @@ toplevel_handle_closed(void *data,
                        struct zwlr_foreign_toplevel_handle_v1 *toplevel) {
   WindowNode *window = (WindowNode *)data;
   (void)toplevel;
-
-  LOG("Window closed: %s", window->title);
 
   WindowNode **prev = &backend_state.windows;
   WindowNode *curr = backend_state.windows;
@@ -229,7 +219,6 @@ toplevel_handle_parent(void *data,
   (void)data;
   (void)toplevel;
   (void)parent;
-  LOG("Window parent updated");
 }
 
 static const struct zwlr_foreign_toplevel_handle_v1_listener toplevel_listener =
@@ -250,8 +239,6 @@ manager_handle_toplevel(void *data,
                         struct zwlr_foreign_toplevel_handle_v1 *toplevel) {
   (void)data;
   (void)manager;
-
-  LOG("New toplevel window");
 
   WindowNode *window = malloc(sizeof(WindowNode));
   if (!window) {
@@ -275,8 +262,6 @@ manager_handle_toplevel(void *data,
 
   zwlr_foreign_toplevel_handle_v1_add_listener(toplevel, &toplevel_listener,
                                                window);
-
-  LOG("Added window, total: %d", backend_state.window_count);
 }
 
 static void
@@ -285,7 +270,6 @@ manager_handle_finished(void *data,
   (void)data;
   (void)manager;
 
-  LOG("Toplevel manager finished");
   backend_state.manager = NULL;
 }
 
@@ -407,15 +391,11 @@ int wlr_get_windows(AppState *state, Config *config) {
     return -1;
   }
 
-  LOG("Getting windows from WLR backend...");
-
   app_state_free(state);
   app_state_init(state);
 
   wl_display_dispatch_pending(backend_state.display);
   wl_display_flush(backend_state.display);
-
-  LOG("Found %d windows via WLR protocol", backend_state.window_count);
 
   if (backend_state.window_count == 0) {
     LOG("No windows found");
@@ -452,15 +432,13 @@ int wlr_get_windows(AppState *state, Config *config) {
     if (app_state_add(state, &info) < 0) {
       window_info_free(&info);
       LOG("Failed to add window to AppState");
-    } else {
-      LOG("Added window %d: %s (%s), activation_serial: %d", index, info.title,
-          info.class_name, curr->activation_serial);
     }
 
     curr = curr->next;
     index++;
   }
 
+  // sort windows by history activation order
   if (state->count > 1) {
     int i, j;
     for (i = 0; i < state->count - 1; i++) {
@@ -475,7 +453,6 @@ int wlr_get_windows(AppState *state, Config *config) {
     }
   }
 
-  LOG("Successfully processed %d windows", state->count);
   return 0;
 }
 
@@ -485,12 +462,9 @@ void wlr_activate_window(const char *identifier) {
     return;
   }
 
-  LOG("Activating window: %s", identifier);
-
   WindowNode *curr = backend_state.windows;
   while (curr) {
     if (curr->identifier && strcmp(curr->identifier, identifier) == 0) {
-      LOG("Found window to activate: %s", curr->title);
 
       // update activation history: move window to the front
       move_window_to_front(curr);
@@ -501,7 +475,6 @@ void wlr_activate_window(const char *identifier) {
         zwlr_foreign_toplevel_handle_v1_activate(curr->handle,
                                                  backend_state.seat);
         wl_display_flush(backend_state.display);
-        LOG("Window activation sent");
       }
       return;
     }
