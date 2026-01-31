@@ -14,7 +14,7 @@
 /* --- Defaults ("wswitch Slate" Theme) --- */
 static void set_defaults(Config *cfg) {
   cfg->mode = MODE_CONTEXT;
-  cfg->follow_monitor = false;
+  cfg->follow_monitor = true;
 
   /* Default Theme Colors */
   cfg->background = 0x1e1e2e;
@@ -208,8 +208,7 @@ static int load_theme(const char *theme_name, Config *cfg) {
   /* Search Order: User themes first, then system */
   const char *search_paths[] = {"%s/.config/wswitch/themes/%s",
                                 "/usr/share/wswitch/themes/%s",
-                                "/usr/local/share/wswitch/themes/%s",
-                                NULL};
+                                "/usr/local/share/wswitch/themes/%s", NULL};
 
   for (int i = 0; search_paths[i]; i++) {
     if (strstr(search_paths[i], "%s/.config")) {
@@ -287,8 +286,8 @@ Config *load_config(void) {
     return cfg;
 
   char config_path[1024];
-  snprintf(config_path, sizeof(config_path),
-           "%s/.config/wswitch/config.ini", home);
+  snprintf(config_path, sizeof(config_path), "%s/.config/wswitch/config.ini",
+           home);
 
   /* First Pass: Read config and extract theme name */
   char theme_name[256] = "";

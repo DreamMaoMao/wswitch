@@ -22,7 +22,7 @@
 mode = context
 
 # The panel position whether to follow the focus of your monitor
-follow_monitor = false
+follow_monitor = true
 
 # ┌───────────────────────────────────────────────────────────────────────────┐
 # │                              THEME SETTINGS                               │
