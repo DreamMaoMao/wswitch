@@ -27,7 +27,6 @@
 
 | Feature | Description |
 |---------|-------------|
-| 🧠 **Context Grouping** | Automatically groups tiled windows by workspace + app class. Your 5 terminal windows become one clean card. |
 | 🎨 **12 Themed Skins** | Ships with Catppuccin, Dracula, Nord, Tokyo Night, and more. Full `.ini` customization. |
 | ⚡ **Native Performance** | Pure C with Wayland Layer Shell. No Electron. No lag. |
 | 🔄 **Crash Recovery** | Socket takeover protocol ensures seamless recovery if the daemon restarts. |
@@ -66,7 +65,7 @@ paru -S wswitch
 <summary>📦 <b>Build from PKGBUILD</b></summary>
 
 ```bash
-git clone https://github.com/OpalAayan/wswitch.git
+git clone https://github.com/DreamMaoMao/wswitch.git
 cd wswitch
 makepkg -si
 ```
@@ -124,11 +123,10 @@ Add these lines to `~/.config/sway/config`:
 
 ```bash
 # Start the daemon on login
-exec-once = wswitch --daemon
+exec wswitch --daemon
 
 # Keybindings
-bind = ALT, Tab, exec, wswitch next
-bind = ALT SHIFT, Tab, exec, wswitch prev
+bindsym Alt+tab exec wswitch next
 ```
 
 ### 3️⃣ You're Done! 🎉
@@ -307,14 +305,6 @@ This project was built with ❤️ for the Linux customization community.
 ---
 
 <div align="center">
-
-### ⚡ Made with love by [OpalAayan](mailto:YougurtMyFace@proton.me)
-
-[![Star](https://img.shields.io/github/stars/OpalAayan/wswitch?style=social)](https://github.com/OpalAayan/wswitch)
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=OpalAayan/wswitch&type=date&legend=top-left)](https://www.star-history.com/#OpalAayan/wswitch&type=date&legend=top-left)
 
 <sub>Licensed under GPL-3.0</sub>
 
