@@ -25,7 +25,6 @@ struct WindowNode {
   int state;
   int is_active;
   int is_minimized;
-  int activation_serial;
   WindowNode *next;
 };
 
@@ -38,7 +37,6 @@ typedef struct {
   int window_count;
   int initialized;
   int needs_refresh;
-  int activation_counter;
 } WlrBackendState;
 
 static WlrBackendState backend_state = {0};
@@ -65,16 +63,13 @@ static void move_window_to_front(WindowNode *window) {
   // insert window to the front of the list
   window->next = backend_state.windows;
   backend_state.windows = window;
-
-  // update activation serial (smaller numbers mean more recently activated)
-  backend_state.activation_counter++;
-  window->activation_serial = backend_state.activation_counter;
 }
 
 static void registry_handle_global(void *data, struct wl_registry *registry,
                                    uint32_t name, const char *interface,
                                    uint32_t version) {
   (void)data;
+  (void)version;
 
   if (strcmp(interface, zwlr_foreign_toplevel_manager_v1_interface.name) == 0) {
     backend_state.manager = wl_registry_bind(
@@ -149,8 +144,6 @@ toplevel_handle_state(void *data,
   WindowNode *window = (WindowNode *)data;
   (void)toplevel;
 
-  int was_active = window->is_active;
-
   window->state = 0;
   window->is_active = 0;
   window->is_minimized = 0;
@@ -166,8 +159,7 @@ toplevel_handle_state(void *data,
     }
   }
 
-  // if window is active and wasn't before, move it to the front
-  if (window->is_active && !was_active) {
+  if (window->is_active) {
     move_window_to_front(window);
   }
 }
@@ -252,9 +244,6 @@ manager_handle_toplevel(void *data,
     snprintf(window->identifier, 64, "wlr-%p", toplevel);
   }
 
-  // initial activation serial is 0 (0 means never activated)
-  window->activation_serial = 0;
-
   window->next = backend_state.windows;
   backend_state.windows = window;
   backend_state.window_count++;
@@ -293,7 +282,6 @@ static void cleanup_windows(void) {
   }
   backend_state.windows = NULL;
   backend_state.window_count = 0;
-  backend_state.activation_counter = 0;
 }
 
 int wlr_backend_init(struct wl_display *display) {
@@ -332,16 +320,6 @@ int wlr_backend_init(struct wl_display *display) {
 
   // set activation serial for initial windows
   int counter = 0;
-  WindowNode *curr = backend_state.windows;
-  while (curr) {
-    if (curr->is_active) {
-      // current active window should be in front
-      backend_state.activation_counter++;
-      curr->activation_serial = backend_state.activation_counter;
-      counter++;
-    }
-    curr = curr->next;
-  }
 
   LOG("WLR backend initialized with %d windows (%d active)",
       backend_state.window_count, counter);
@@ -379,7 +357,6 @@ void wlr_backend_cleanup(void) {
   backend_state.initialized = 0;
   backend_state.window_count = 0;
   backend_state.needs_refresh = 0;
-  backend_state.activation_counter = 0;
 }
 
 int wlr_get_windows(AppState *state, Config *config) {
@@ -417,16 +394,9 @@ int wlr_get_windows(AppState *state, Config *config) {
     info.class_name = strdup(curr->app_id ? curr->app_id : "unknown");
     info.workspace_id = 0;
 
-    if (curr->activation_serial == 0) {
-      info.focus_history_id = 10000 + index;
-    } else {
-      info.focus_history_id = 1000 - curr->activation_serial;
-    }
-
     info.is_active = curr->is_active;
     info.is_floating = 0;
     info.group_count = 1;
-    info.focus_history_id = curr->is_active ? 0 : info.focus_history_id;
 
     if (app_state_add(state, &info) < 0) {
       window_info_free(&info);
@@ -435,21 +405,6 @@ int wlr_get_windows(AppState *state, Config *config) {
 
     curr = curr->next;
     index++;
-  }
-
-  // sort windows by history activation order
-  if (state->count > 1) {
-    int i, j;
-    for (i = 0; i < state->count - 1; i++) {
-      for (j = i + 1; j < state->count; j++) {
-        if (state->windows[i].focus_history_id >
-            state->windows[j].focus_history_id) {
-          WindowInfo tmp = state->windows[i];
-          state->windows[i] = state->windows[j];
-          state->windows[j] = tmp;
-        }
-      }
-    }
   }
 
   return 0;
