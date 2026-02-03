@@ -93,10 +93,7 @@ sudo pacman -S wayland cairo pango json-c libxkbcommon glib2 librsvg
 make
 
 # Install system-wide
-sudo make install
-
-# Or install for current user only
-make install-user
+sudo make install PREFIX=/usr
 ```
 
 ---
@@ -111,21 +108,21 @@ wswitch-install-config
 
 This copies themes and creates `~/.config/wswitch/config.ini`.
 
-### 2️⃣ Add to Sway Config
+### 2️⃣ Add to Mango Config
 
-Add these lines to `~/.config/sway/config`:
+Add these lines to `~/.config/mango/config.conf`:
 
 ```bash
 # Start the daemon on login
-exec wswitch --daemon
+exec-once = wswitch --daemon
 
 # Keybindings
-bindsym Alt+tab exec wswitch next
+bind=Alt,Tab,spawn,wswitch next
 ```
 
 ### 3️⃣ You're Done! 🎉
 
-Press <kbd>Alt</kbd> + <kbd>Tab</kbd> to see it in action.
+reloagin your session and Press <kbd>Alt</kbd> + <kbd>Tab</kbd> to see it in action.
 
 ---
 
