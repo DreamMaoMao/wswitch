@@ -350,7 +350,6 @@ void wlr_backend_cleanup(void) {
   }
 
   if (backend_state.display) {
-    wl_display_disconnect(backend_state.display);
     backend_state.display = NULL;
   }
 
