@@ -31,10 +31,6 @@
 #define PROTOCOL_RETRY_MAX 50
 #define PROTOCOL_RETRY_MS 100
 
-/* Ruthless Takeover Protocol */
-#define TAKEOVER_TIMEOUT_MS 1000
-#define TAKEOVER_POLL_MS 100
-
 /* Global State */
 struct wl_display *display = NULL;
 struct wl_compositor *compositor = NULL;
@@ -54,14 +50,10 @@ static int socket_fd = -1;
 
 Backend *backend = NULL;
 
-/* Startup Race Condition Fix */
-// static bool first_show_done = false;
-
 /* Signal Handling */
 static volatile sig_atomic_t should_quit = 0;
-static volatile sig_atomic_t caught_signal = 0;
 static void signal_handler(int sig) {
-  caught_signal = sig;
+  (void)sig;
   should_quit = 1;
 }
 
@@ -146,6 +138,7 @@ static void registry_global_remove(void *data, struct wl_registry *registry,
   (void)data;
   (void)registry;
   (void)name;
+  LOG("Registry global removed: %u (compositor may be exiting)", name);
 }
 
 static const struct wl_registry_listener registry_listener = {
@@ -328,49 +321,11 @@ static int run_client(const char *cmd) {
   return send_command(socket_cmd) == 0 ? 0 : 1;
 }
 
-/* Ruthless Takeover: Kill existing zombie daemon before startup */
-static int takeover_existing_daemon(void) {
-  if (!is_daemon_running()) {
-    return 0; /* No existing daemon, proceed normally */
-  }
-
-  LOG("Existing daemon detected - initiating takeover...");
-
-  /* Step 1: Send quit command to existing daemon */
-  if (send_command(CMD_QUIT) != 0) {
-    LOG("Failed to send quit command, socket may be stuck");
-  }
-
-  /* Step 2: Poll until old daemon dies or timeout */
-  int elapsed = 0;
-  while (elapsed < TAKEOVER_TIMEOUT_MS) {
-    sleep_ms(TAKEOVER_POLL_MS);
-    elapsed += TAKEOVER_POLL_MS;
-
-    if (!is_daemon_running()) {
-      LOG("Old daemon terminated gracefully after %dms", elapsed);
-      return 0; /* Success - old daemon gone */
-    }
-  }
-
-  /* Step 3: Force takeover - unlink the socket file */
-  LOG("Timeout! Old daemon did not respond - forcing takeover...");
-  if (unlink(SOCKET_PATH) == 0) {
-    LOG("Forcefully removed stale socket");
-  } else {
-    LOG("Warning: Could not unlink socket: %s", strerror(errno));
-  }
-
-  /* Small delay to ensure cleanup */
-  sleep_ms(50);
-  return 0;
-}
-
 /* Daemon Mode */
 static int run_daemon(void) {
-  /* Ruthless Takeover: Kill any existing zombie instead of exiting politely */
-  if (takeover_existing_daemon() != 0) {
-    LOG("Failed to take over from existing daemon");
+  /* Check if daemon is already running */
+  if (is_daemon_running()) {
+    fprintf(stderr, "Error: Daemon is already running.\n");
     return 1;
   }
 
@@ -382,15 +337,8 @@ static int run_daemon(void) {
   sigaction(SIGINT, &sa, NULL);
   sigaction(SIGTERM, &sa, NULL);
 
-  /* Ignore signals that shouldn't terminate the daemon */
-  struct sigaction sa_ignore;
-  sa_ignore.sa_handler = SIG_IGN;
-  sigemptyset(&sa_ignore.sa_mask);
-  sa_ignore.sa_flags = 0;
-  sigaction(SIGHUP, &sa_ignore, NULL);  /* Terminal hangup - ignore */
-  sigaction(SIGUSR1, &sa_ignore, NULL); /* User signal 1 - ignore */
-  sigaction(SIGUSR2, &sa_ignore, NULL); /* User signal 2 - ignore */
-  sigaction(SIGPIPE, &sa_ignore, NULL); /* Broken pipe - ignore */
+  /* Set SIGPIPE to SIG_IGN to prevent crashes on broken pipe */
+  signal(SIGPIPE, SIG_IGN);
 
   /* 2. Config & Resources */
   config = load_config();
@@ -413,13 +361,15 @@ static int run_daemon(void) {
   }
   if (!display) {
     LOG("Failed to connect to Wayland");
-    backend_cleanup(backend);
+    if (backend)
+      backend_cleanup(backend);
     return 1;
   }
 
   backend = backend_init(display);
   if (!backend) {
     LOG("Failed to initialize backend");
+    wl_display_disconnect(display);
     return 1;
   }
   LOG("Using %s backend", backend->get_name());
@@ -436,7 +386,9 @@ static int run_daemon(void) {
   }
   if (!compositor || !layer_shell || !shm) {
     LOG("Failed to bind Wayland protocols");
-    backend_cleanup(backend);
+    if (backend)
+      backend_cleanup(backend);
+    wl_display_disconnect(display);
     return 1;
   }
 
@@ -456,7 +408,9 @@ static int run_daemon(void) {
   /* 6. Socket Server */
   socket_fd = init_server();
   if (socket_fd < 0) {
-    backend_cleanup(backend);
+    if (backend)
+      backend_cleanup(backend);
+    wl_display_disconnect(display);
     return 1;
   }
 
@@ -464,31 +418,59 @@ static int run_daemon(void) {
 
   struct pollfd fds[2];
   fds[0].fd = wl_display_get_fd(display);
-  fds[0].events = POLLIN;
+  fds[0].events = POLLIN | POLLERR | POLLHUP;
   fds[1].fd = socket_fd;
   fds[1].events = POLLIN;
 
   while (running && !should_quit) {
-    while (wl_display_prepare_read(display) != 0) {
-      wl_display_dispatch_pending(display);
-    }
-    wl_display_flush(display);
-
-    if (poll(fds, 2, 100) < 0) {
-      if (errno == EINTR) {
-        wl_display_cancel_read(display);
-        continue;
+    /* prepare to read Wayland events */
+    int ret = wl_display_prepare_read(display);
+    if (ret != 0) {
+      /* prepare failed, may be because the connection has been lost */
+      ret = wl_display_dispatch_pending(display);
+      if (ret == -1) {
+        LOG("Wayland connection lost (dispatch_pending failed)");
+        break;
       }
-      break;
-    }
-
-    if (fds[0].revents & POLLIN) {
-      wl_display_read_events(display);
-      wl_display_dispatch_pending(display);
+      /* continue waiting for events */
     } else {
-      wl_display_cancel_read(display);
+      wl_display_flush(display);
+
+      /* Poll for events with 100ms timeout */
+      if (poll(fds, 2, 100) < 0) {
+        if (errno == EINTR) {
+          wl_display_cancel_read(display);
+          continue;
+        }
+        LOG("poll error: %s", strerror(errno));
+        break;
+      }
+
+      /* check if Wayland connection has been terminated */
+      if (fds[0].revents & (POLLERR | POLLHUP)) {
+        LOG("Wayland connection terminated (compositor exited)");
+        wl_display_cancel_read(display);
+        break;
+      }
+
+      if (fds[0].revents & POLLIN) {
+        /* read and process Wayland events */
+        if (wl_display_read_events(display) == -1) {
+          LOG("Failed to read Wayland events");
+          break;
+        }
+
+        ret = wl_display_dispatch_pending(display);
+        if (ret == -1) {
+          LOG("Wayland dispatch_pending failed");
+          break;
+        }
+      } else {
+        wl_display_cancel_read(display);
+      }
     }
 
+    /* handle socket commands */
     if (fds[1].revents & POLLIN) {
       while (1) {
         struct sockaddr_un cli_addr;
@@ -516,12 +498,8 @@ static int run_daemon(void) {
     }
   }
 
-  /* 8. Cleanup */
-  if (caught_signal) {
-    LOG("Caught signal %d, shutting down...", caught_signal);
-  } else {
-    LOG("Cleaning up...");
-  }
+  /* 7. Cleanup */
+  LOG("Cleaning up...");
 
   cleanup_server(socket_fd);
   input_cleanup();
@@ -545,6 +523,7 @@ static int run_daemon(void) {
   if (display)
     wl_display_disconnect(display);
 
+  LOG("Daemon stopped");
   return 0;
 }
 
